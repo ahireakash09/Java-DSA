@@ -1,0 +1,89 @@
+Given an integer array `nums` of length `n` and an integer `target`, find three integers at **distinct indices** in `nums` such that the sum is closest to `target`.
+
+Return *the sum of the three integers*.
+
+You may assume that each input would have exactly one solution.
+
+**Example 1:**
+
+```
+Input: nums = [-1,2,1,-4], target = 1
+Output: 2
+Explanation: The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
+```
+
+**Example 2:**
+
+```
+Input: nums = [0,0,0], target = 1
+Output: 0
+Explanation: The sum that is closest to the target is 0. (0 + 0 + 0 = 0).
+```
+
+**Constraints:**
+
+- `3 <= nums.length <= 500`
+- `1000 <= nums[i] <= 1000`
+- `10^4 <= target <= 10^4`
+
+## High-Level Approach
+
+1. **Sort the array**
+2. Fix **one number** using a loop
+3. Use **two pointers** (`left` and `right`) to find the best pair for the fixed number
+4. Keep updating the **closest sum**
+5. Return the final closest sum
+
+Solution
+
+```java
+class Solution {
+    public int threeSumClosest(int[] nums, int target) {
+
+        // Step 1: Sort the array to use two-pointer technique
+        Arrays.sort(nums);
+
+        // Step 2: Initialize closestSum with sum of first three elements
+        int closestSum = nums[0] + nums[1] + nums[2];
+
+        // Step 3: Fix the first element one by one
+        for (int i = 0; i < nums.length - 2; i++) {
+
+            // Initialize two pointers
+            int left = i + 1;              // Pointer just after i
+            int right = nums.length - 1;   // Pointer at the end of array
+
+            // Step 4: Move pointers to find best sum for current i
+            while (left < right) {
+
+                // Calculate current sum of three numbers
+                int currentSum = nums[i] + nums[left] + nums[right];
+
+                // Step 5: Update closestSum if currentSum is closer to target
+                if (Math.abs(currentSum - target) < Math.abs(closestSum - target)) {
+                    closestSum = currentSum;
+                }
+
+                // Step 6: Adjust pointers based on comparison with target
+                if (currentSum < target) {
+                    left++;        // Increase sum by moving left pointer right
+                } else if (currentSum > target) {
+                    right--;       // Decrease sum by moving right pointer left
+                } else {
+                    // Exact target sum found, no need to continue
+                    return currentSum;
+                }
+            }
+        }
+
+        // Step 7: Return the closest sum found
+        return closestSum;
+    }
+}
+
+```
+
+## Time & Space Complexity:
+
+Time Complexity=O(n²)
+Space Complexity=O(1) |
