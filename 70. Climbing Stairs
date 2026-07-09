@@ -1,0 +1,171 @@
+You are climbing a staircase. It takes `n` steps to reach the top.
+
+Each time you can either climb `1` or `2` steps. In how many distinct ways can you climb to the top?
+
+**Example 1:**
+
+```
+Input: n = 2
+Output: 2
+Explanation: There are two ways to climb to the top.
+1. 1 step + 1 step
+2. 2 steps
+```
+
+**Example 2:**
+
+```
+Input: n = 3
+Output: 3
+Explanation: There are three ways to climb to the top.
+1. 1 step + 1 step + 1 step
+2. 1 step + 2 steps
+3. 2 steps + 1 step
+```
+
+**Constraints:**
+
+- `1 <= n <= 45`
+
+# Approach
+
+### Step 1: Handle Base Case
+
+If there is only one stair:
+
+```java
+if (n==1) return 1;
+```
+
+There is only one way:
+
+```java
+1
+```
+
+---
+
+### Step 2: Create a DP Array
+
+```java
+int dp[]=new int[n+1];
+```
+
+`dp[i]` stores the number of ways to reach the `i`th stair.
+
+---
+
+### Step 3: Initialize Base Cases
+
+```java
+dp[1]=1;
+dp[2]=2;
+```
+
+Meaning:
+
+```
+1 stair  -> 1 way
+
+2 stairs ->
+1+1
+2
+
+Total = 2 ways
+```
+
+---
+
+### Step 4: Fill the DP Array
+
+Start from stair `3`.
+
+```java
+for (int i=3;i<=n;i++)
+```
+
+Use the recurrence:
+
+```java
+dp[i]=dp[i-1]+dp[i-2];
+```
+
+Because:
+
+- Reach from previous stair (1 step)
+- Reach from two stairs behind (2 steps)
+
+---
+
+### Step 5: Return the Answer
+
+```java
+return dp[n];
+```
+
+## Solution 1
+
+```java
+class Solution {
+    public int climbStairs(int n) {
+
+        // Base case: only one way to climb one stair
+        if (n == 1)
+            return 1;
+
+        // dp[i] stores the number of ways to reach stair i
+        int dp[] = new int[n + 1];
+
+        // Base cases
+        dp[1] = 1;
+        dp[2] = 2;
+
+        // Fill the DP array using the recurrence relation
+        for (int i = 3; i <= n; i++) {
+
+            // Ways to reach current stair =
+            // ways from previous stair +
+            // ways from two stairs before
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+
+        // Return the number of ways to reach the nth stair
+        return dp[n];
+    }   //tc=O(n)
+}       //sc=O(n)
+```
+
+## Solution 2
+
+```java
+class Solution {
+    public int climbStairs(int n) {
+
+        // Base cases:
+        // If there are 1 or 2 stairs,
+        // the answer is simply n.
+        if (n <= 2)
+            return n;
+
+        // Ways to reach stair 1
+        int prev2 = 1;
+
+        // Ways to reach stair 2
+        int prev1 = 2;
+
+        // Calculate ways from stair 3 to n
+        for (int i = 3; i <= n; i++) {
+
+            // Current ways = previous two ways
+            int curr = prev1 + prev2;
+
+            // Move the window forward
+            prev2 = prev1;
+            prev1 = curr;
+        }
+
+        // Final answer
+        return prev1;
+    }   //tc=O(n)
+}       //sc=O(1)
+```
