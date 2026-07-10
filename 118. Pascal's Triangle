@@ -1,0 +1,202 @@
+Given an integer `numRows`, return the first numRows of **Pascal's triangle**.
+
+In **Pascal's triangle**, each number is the sum of the two numbers directly above it as shown:
+
+![](https://upload.wikimedia.org/wikipedia/commons/0/0d/PascalTriangleAnimated2.gif)
+
+**Example 1:**
+
+```
+Input: numRows = 5
+Output: [[1],[1,1],[1,2,1],[1,3,3,1],[1,4,6,4,1]]
+```
+
+**Example 2:**
+
+```
+Input: numRows = 1
+Output: [[1]]
+```
+
+**Constraints:**
+
+- `1 <= numRows <= 30`
+
+# Approach
+
+### Step 1: Create Result List
+
+Create a list to store all rows.
+
+```java
+List<List<Integer>>result=new ArrayList<>();
+```
+
+---
+
+### Step 2: Handle Edge Case
+
+If there are no rows to generate:
+
+```java
+if (numRows==0) return result;
+```
+
+---
+
+### Step 3: Add the First Row
+
+The first row is always:
+
+```
+[1]
+```
+
+```java
+List<Integer>firstRow=new ArrayList<>();
+firstRow.add(1);
+result.add(firstRow);
+```
+
+If only one row is required:
+
+```java
+if(numRows==1) return result;
+```
+
+---
+
+### Step 4: Generate Remaining Rows
+
+Loop from the second row to the last row.
+
+```java
+for (int i=1;i<numRows;i++)
+```
+
+---
+
+### Step 5: Get Previous Row
+
+```java
+List<Integer>prevRow=result.get(i-1);
+```
+
+We will use this row to build the current row.
+
+---
+
+### Step 6: Add First Element
+
+Every row starts with `1`.
+
+```java
+row.add(1);
+```
+
+---
+
+### Step 7: Compute Middle Elements
+
+Each middle element is the sum of two adjacent elements in the previous row.
+
+```java
+row.add(prevRow.get(j)+prevRow.get(j+1));
+```
+
+---
+
+### Step 8: Add Last Element
+
+Every row ends with `1`.
+
+```java
+row.add(1);
+```
+
+---
+
+### Step 9: Store Current Row
+
+```java
+result.add(row);
+```
+
+Continue until all rows are generated.
+
+## Solution
+
+```java
+class Solution {
+    public List<List<Integer>> generate(int numRows) {
+
+        // Stores the complete Pascal's Triangle
+        List<List<Integer>> result = new ArrayList<>();
+
+        // Edge case: no rows
+        if (numRows == 0)
+            return result;
+
+        // First row is always [1]
+        List<Integer> firstRow = new ArrayList<>();
+        firstRow.add(1);
+        result.add(firstRow);
+
+        // If only one row is needed
+        if (numRows == 1)
+            return result;
+
+        // Generate remaining rows
+        for (int i = 1; i < numRows; i++) {
+
+            // Get the previous row
+            List<Integer> prevRow = result.get(i - 1);
+
+            // Create current row
+            List<Integer> row = new ArrayList<>();
+
+            // First element is always 1
+            row.add(1);
+
+            // Fill middle elements using previous row
+            for (int j = 0; j < i - 1; j++) {
+                row.add(prevRow.get(j) + prevRow.get(j + 1));
+            }
+
+            // Last element is always 1
+            row.add(1);
+
+            // Add current row to result
+            result.add(row);
+        }
+
+        // Return the complete Pascal's Triangle
+        return result;
+    }
+}
+```
+
+# Time Complexity
+
+There are:
+
+- 1 element in Row 1
+- 2 elements in Row 2
+- ...
+- `numRows` elements in the last row.
+
+Therefore,
+
+```
+Time Complexity = O(numRows²)
+```
+
+# Space Complexity
+
+The output itself stores all elements of Pascal's Triangle.
+
+```
+Space Complexity = O(numRows²)
+```
+
+(No significant extra space is used beyond the required output.)
