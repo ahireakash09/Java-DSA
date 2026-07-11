@@ -1,0 +1,76 @@
+Given a binary array `nums`, return *the maximum number of consecutive* `1`*'s in the array*.
+
+**Example 1:**
+
+```
+Input: nums = [1,1,0,1,1,1]
+Output: 3
+Explanation: The first two digits or the last three digits are consecutive 1s. The maximum number of consecutive 1s is 3.
+
+```
+
+**Example 2:**
+
+```
+Input: nums = [1,0,1,1,0,1]
+Output: 2
+
+```
+
+**Constraints:**
+
+- `1 <= nums.length <= 105`
+- `nums[i]` is either `0` or `1`.
+
+## High-Level Approach
+
+1. Traverse the array once.
+2. Maintain a counter (`count`) for **current consecutive 1s**.
+3. When `1` is found → increment `count`.
+4. When `0` is found:
+    - Update `max` with the maximum of `max` and `count`.
+    - Reset `count` to `0`.
+5. After traversal, return the maximum value between `max` and `count`
+    
+    (to handle arrays ending with `1`s).
+    
+
+## **Solution:**
+
+```java
+class Solution {
+    public int findMaxConsecutiveOnes(int[] nums) {
+
+        // Stores current count of consecutive 1s
+        int count = 0;
+
+        // Stores maximum count of consecutive 1s found so far
+        int max = 0;
+
+        // Traverse the array
+        for (int i = 0; i < nums.length; i++) {
+
+            // If current element is 1, increase count
+            if (nums[i] == 1)
+                count += 1;
+
+            // If current element is 0
+            else {
+                // Update max if current count is greater
+                max = Math.max(max, count);
+
+                // Reset count for next sequence
+                count = 0;
+            }
+        }
+
+        // Handle case when array ends with 1s
+        return Math.max(max, count);
+    }
+}
+```
+
+## Time & Space Complexity:
+
+Time Complexity=O(n) 
+Space Complexity=O(1) |
