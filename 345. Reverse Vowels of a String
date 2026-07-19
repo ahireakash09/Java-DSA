@@ -1,0 +1,204 @@
+Given a string `s`, reverse only all the vowels in the string and return it.
+
+The vowels are `'a'`, `'e'`, `'i'`, `'o'`, and `'u'`, and they can appear in both lower and upper cases, more than once.
+
+**Example 1:**
+
+**Input:** s = "IceCreAm"
+
+**Output:** "AceCreIm"
+
+**Explanation:**
+
+The vowels in `s` are `['I', 'e', 'e', 'A']`. On reversing the vowels, s becomes `"AceCreIm"`.
+
+**Example 2:**
+
+**Input:** s = "leetcode"
+
+**Output:** "leotcede"
+
+**Constraints:**
+
+- `1 <= s.length <= 3 * 105`
+- `s` consist of **printable ASCII** characters.
+
+# Approach
+
+### Step 1: Create a Helper Function
+
+Check whether a character is a vowel.
+
+```java
+public boolean isVowel(char ch)
+```
+
+Return `true` for:
+
+```
+a e i o u
+A E I O U
+```
+
+Otherwise return `false`.
+
+---
+
+### Step 2: Convert String into Mutable Form
+
+Strings in Java are immutable.
+
+So create a `StringBuilder`.
+
+```java
+StringBuilder sb=new StringBuilder(s);
+```
+
+Now characters can be swapped easily.
+
+---
+
+### Step 3: Initialize Two Pointers
+
+```java
+int l=0;int r=s.length()-1;
+```
+
+- `l` starts from the beginning.
+- `r` starts from the end.
+
+---
+
+### Step 4: Traverse Until Both Pointers Meet
+
+```java
+while (l<r)
+```
+
+Continue searching for vowels.
+
+---
+
+### Step 5: Skip Non-Vowels from Left
+
+If left character isn't a vowel,
+
+```java
+l++;
+```
+
+Move forward.
+
+---
+
+### Step 6: Skip Non-Vowels from Right
+
+If right character isn't a vowel,
+
+```java
+r--;
+```
+
+Move backward.
+
+---
+
+### Step 7: Swap Two Vowels
+
+If both characters are vowels,
+
+```java
+char ch1=sb.charAt(l);
+char ch2=sb.charAt(r);
+sb.setCharAt(l,ch2);
+sb.setCharAt(r,ch1);
+```
+
+Then move both pointers.
+
+```java
+l++;r--;
+```
+
+---
+
+### Step 8: Return the Result
+
+Convert `StringBuilder` back into a string.
+
+```java
+return sb.toString();
+```
+
+## Solution
+
+```java
+class Solution {
+
+    // Function to check whether a character is a vowel
+    public boolean isVowel(char ch) {
+
+        ch = Character.toLowerCase(ch);
+        return ch == 'a' || ch == 'e' ||
+           ch == 'i' || ch == 'o' ||
+           ch == 'u';
+    }
+
+    public String reverseVowels(String s) {
+
+        // Convert string to mutable StringBuilder
+        StringBuilder sb = new StringBuilder(s);
+
+        // Two pointers
+        int l = 0;
+        int r = s.length() - 1;
+
+        // Continue until pointers meet
+        while (l < r) {
+
+            // Skip non-vowel from left
+            if (!isVowel(sb.charAt(l))) {
+                l++;
+            }
+
+            // Skip non-vowel from right
+            else if (!isVowel(sb.charAt(r))) {
+                r--;
+            }
+
+            // Both are vowels, so swap
+            else {
+
+                char ch1 = sb.charAt(l);
+                char ch2 = sb.charAt(r);
+
+                sb.setCharAt(l, ch2);
+                sb.setCharAt(r, ch1);
+
+                // Move both pointers
+                l++;
+                r--;
+            }
+        }
+
+        // Return the modified string
+        return sb.toString();
+    }
+}
+```
+
+# Time Complexity
+
+Each pointer moves at most `n` times.
+
+**Time Complexity:** **O(n)**
+
+where `n` is the length of the string.
+
+# Space Complexity
+
+The `StringBuilder` stores a copy of the input string.
+
+**Space Complexity:** **O(n)**
+
+(If the string were converted to a character array instead, the extra space would still be **O(n)**.)
