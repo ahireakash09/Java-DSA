@@ -1,0 +1,150 @@
+Given an integer array `nums` and an integer `k`, return `true` *if there are two **distinct indices*** `i` *and* `j` *in the array such that* `nums[i] == nums[j]` *and* `abs(i - j) <= k`.
+
+**Example 1:**
+
+```
+Input: nums = [1,2,3,1], k = 3
+Output: true
+```
+
+**Example 2:**
+
+```
+Input: nums = [1,0,1,1], k = 1
+Output: true
+```
+
+**Example 3:**
+
+```
+Input: nums = [1,2,3,1,2,3], k = 2
+Output: false
+```
+
+**Constraints:**
+
+- `1 <= nums.length <= 105`
+- `109 <= nums[i] <= 109`
+- `0 <= k <= 105`
+
+## Approach 1 (HashMap with Last Index)
+
+1. Use a `HashMap` to store:
+    - **Key** → number
+    - **Value** → last index where it appeared
+2. Traverse the array.
+3. For each element:
+    - If already in map, compute index difference.
+    - If `difference ≤ k`, return `true`.
+4. Update the index in the map.
+5. If loop ends, return `false`.
+
+This ensures we always compare with the **nearest previous occurrence**.
+
+## Solution 1
+
+```java
+class Solution {
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        // Map to store the last index of each number
+        Map<Integer, Integer> map = new HashMap<>();
+        // Traverse the array
+        for (int i = 0; i < nums.length; i++) {
+            // If number already appeared before
+            if (map.containsKey(nums[i])) {
+                // Calculate distance between indices
+                int diff = i - map.get(nums[i]);
+                // If distance is within k
+                if (diff <= k) {
+                    return true;
+                }
+            }
+            // Update latest index of current number
+            map.put(nums[i], i);
+        }
+        // No nearby duplicate found
+        return false;
+    }
+}
+```
+
+## Time Complexity
+
+Let `n = nums.length`.
+
+- Loop runs `n` times → `O(n)`
+- HashMap operations → `O(1)` average
+
+**Total Time:** `O(n)`
+
+## Space Complexity
+
+Extra space used:
+
+- HashMap may store up to `n` elements in worst case.
+
+**Space Complexity:** `O(n)`
+
+(Not `O(1)` because of HashMap)
+
+## Approach 2 (Sliding Window + HashSet)
+
+1. Maintain a sliding window of size at most `k`.
+2. Store window elements in a `HashSet`.
+3. For each index `i`:
+    - If `nums[i]` already exists → duplicate within distance `k`.
+    - Otherwise, add it to the set.
+4. Remove elements that go out of the window (`i - k`).
+
+This ensures we only compare elements within distance `k`.
+
+## Solution 2
+
+```java
+class Solution {
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+
+        // Set to store elements in current window of size at most k
+        Set<Integer> set = new HashSet<>();
+
+        // Traverse the array
+        for (int i = 0; i < nums.length; i++) {
+
+            // If current element already exists in window
+            if (set.contains(nums[i])) {
+                return true; // duplicate found within distance k
+            }
+
+            // Add current element to window
+            set.add(nums[i]);
+
+            // Maintain window size of at most k
+            if (set.size() > k) {
+                set.remove(nums[i - k]); // remove element outside window
+            }
+        }
+
+        // No nearby duplicate found
+        return false;
+    }
+}
+```
+
+## Time Complexity
+
+Let `n = nums.length`.
+
+- Loop runs `n` times → `O(n)`
+- HashSet operations → `O(1)` average
+
+**Time Complexity:** `O(n)`
+
+## Space Complexity
+
+Extra space used:
+
+- HashSet stores at most `k` elements.
+
+**Space Complexity:** `O(k)`
+
+(Not `O(n)` in this approach — bounded by window size)
