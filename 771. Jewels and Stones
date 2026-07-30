@@ -1,0 +1,137 @@
+You're given strings `jewels` representing the types of stones that are jewels, and `stones` representing the stones you have. Each character in `stones` is a type of stone you have. You want to know how many of the stones you have are also jewels.
+
+Letters are case sensitive, so `"a"` is considered a different type of stone from `"A"`.
+
+**Example 1:**
+
+```
+Input: jewels = "aA", stones = "aAAbbbb"
+Output: 3
+
+```
+
+**Example 2:**
+
+```
+Input: jewels = "z", stones = "ZZ"
+Output: 0
+
+```
+
+**Constraints:**
+
+- `1 <= jewels.length, stones.length <= 50`
+- `jewels` and `stones` consist of only English letters.
+- All the characters of `jewels` are **unique**.
+
+# Approach 1: Brute Force (Nested Loops)
+
+### Idea
+
+- For every character in `jewels`
+- Compare it with every character in `stones`
+- Count matches
+
+## Solution
+
+```java
+class Solution {
+    public int numJewelsInStones(String jewels, String stones) {
+        int count = 0;
+        // Loop through each jewel
+        for (char jwl : jewels.toCharArray()) {
+            // Compare with each stone
+            for (char stn : stones.toCharArray()) {
+                // If match found
+                if (jwl == stn) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+}
+```
+
+## Time Complexity (Your Code)
+
+Let:
+
+- `J` = length of jewels
+- `S` = length of stones
+
+Two nested loops:
+
+O(J × S)
+
+❌ This can be slow when strings are large.
+
+## Space Complexity
+
+No extra data structure used.
+
+**O(1)**
+
+# Approach 2 (HashSet Lookup)
+
+1. Store all characters from `jewels` in a `HashSet`.
+2. Traverse `stones` one by one.
+3. For each stone, check if it exists in the set.
+4. If yes → it is a jewel → increment count.
+
+Why this works:
+
+- `HashSet.contains()` works in **O(1)** average time.
+
+So we avoid nested loops.
+
+## Solution 2
+
+```java
+class Solution {
+    public int numJewelsInStones(String jewels, String stones) {
+        int count = 0;
+        // HashSet to store all jewel characters
+        HashSet<Character> set = new HashSet<>();
+        // Add each jewel to the set
+        for (char ch : jewels.toCharArray()) {
+            set.add(ch);
+        }
+        // Check each stone
+        for (char stone : stones.toCharArray()) {
+            // If stone is a jewel, increase count
+            if (set.contains(stone)) {
+                count++;
+            }
+        }
+        return count;
+    }
+}
+```
+
+# Time Complexity
+
+Let:
+
+- `J` = length of `jewels`
+- `S` = length of `stones`
+
+### Step 1: Build Set → `O(J)`
+
+### Step 2: Check Stones → `O(S)`
+
+**Total Time Complexity:**
+
+O(J + S)
+
+# Space Complexity
+
+Extra space used:
+
+- HashSet stores at most `J` characters
+
+**Space Complexity:**
+
+O(J)
+
+(Not O(1), because it grows with jewels length)
