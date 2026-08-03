@@ -1,0 +1,87 @@
+Boyer–Moore Voting Algorithm
+
+Given an array `nums` of size `n`, return *the majority element*.
+
+The majority element is the element that appears more than `⌊n / 2⌋` times. You may assume that the majority element always exists in the array.
+
+**Example 1:**
+
+```
+Input: nums = [3,2,3]
+Output: 3
+```
+
+**Example 2:**
+
+```
+Input: nums = [2,2,1,1,1,2,2]
+Output: 2
+```
+
+**Constraints:**
+
+- `n == nums.length`
+- `1 <= n <= 5 * 104`
+- `109 <= nums[i] <= 109`
+- The input is generated such that a majority element will exist in the array.
+
+**Follow-up:**
+
+Could you solve the problem in linear time and in O(1) space?
+
+# Approach (Boyer–Moore Voting Algorithm)
+
+### Key Idea:
+
+The majority element appears **more than n/2 times**.
+
+So even if we cancel it with other elements, it **cannot be eliminated**.
+
+### How It Works:
+
+- Same element → `+1`
+- Different element → `1`
+- When count becomes `0` → reset candidate
+
+Opposite pairs cancel each other.
+
+Majority always survives.
+
+## Solution:
+
+```java
+class Solution {
+    public int majorityElement(int[] nums) {
+        int freq = 0;   // Counter
+        int ans = 0;    // Current candidate
+        for (int i = 0; i < nums.length; i++) {
+            // If counter becomes 0, choose new candidate
+            if (freq == 0) {
+                ans = nums[i];
+            }
+            // Vote for candidate
+            if (ans == nums[i]) {
+                freq++;
+            } 
+            // Vote against candidate
+            else {
+                freq--;
+            }
+        }
+        // Majority element always exists (as per problem)
+        return ans;
+    }
+}
+```
+
+# Time Complexity
+
+Single pass.
+
+✅ **Time Complexity:** O(n)
+
+# Space Complexity
+
+Only two variables.
+
+✅ **Space Complexity:** O(1)
