@@ -1,0 +1,87 @@
+You are given an integer array `nums` consisting of `n` elements, and an integer `k`.
+
+Find a contiguous subarray whose **length is equal to** `k` that has the maximum average value and return *this value*. Any answer with a calculation error less than `10-5` will be accepted.
+
+**Example 1:**
+
+```
+Input: nums = [1,12,-5,-6,50,3], k = 4
+Output: 12.75000
+Explanation: Maximum average is (12 - 5 - 6 + 50) / 4 = 51 / 4 = 12.75
+```
+
+**Example 2:**
+
+```
+Input: nums = [5], k = 1
+Output: 5.00000
+```
+
+**Constraints:**
+
+- `n == nums.length`
+- `1 <= k <= n <= 105`
+- `104 <= nums[i] <= 104`
+
+# **Approach: Fixed-Size Sliding Window**
+
+We are asked to find the **maximum average of any subarray of length `k`**.
+
+Instead of recalculating the sum every time (O(n·k)), we:
+
+👉 Use a **sliding window of size `k`**
+
+### Idea:
+
+1️⃣ Compute sum of first `k` elements
+
+2️⃣ Slide the window one step at a time:
+
+- Add next element
+- Remove previous element
+    
+    3️⃣ Track maximum sum
+    
+    4️⃣ Divide by `k` at the end
+    
+
+## Solution:
+
+```java
+class Solution {
+    public double findMaxAverage(int[] nums, int k) {
+        int windowSum = 0;
+        // Step 1: Calculate sum of first window (size k)
+        for (int i = 0; i < k; i++) {
+            windowSum += nums[i];
+        }
+        // Initialize maxSum with first window sum
+        int maxSum = windowSum;
+        // Step 2: Slide the window
+        for (int i = k; i < nums.length; i++) {
+            // Add next element and remove leftmost element
+            windowSum += nums[i] - nums[i - k];
+            // Update maximum sum
+            maxSum = Math.max(maxSum, windowSum);
+        }
+        // Step 3: Return maximum average
+        return (double) maxSum / k;
+    }
+}
+```
+
+# **Time Complexity**
+
+First loop → O(k)
+
+Second loop → O(n - k)
+
+Total: O(n)
+
+✔ Linear time — optimal.
+
+# **Space Complexity**
+
+Only a few variables used: O(1)
+
+✔ Constant space.
