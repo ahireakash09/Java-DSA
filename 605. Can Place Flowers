@@ -1,0 +1,76 @@
+You have a long flowerbed in which some of the plots are planted, and some are not. However, flowers cannot be planted in **adjacent** plots.
+
+Given an integer array `flowerbed` containing `0`'s and `1`'s, where `0` means empty and `1` means not empty, and an integer `n`, return `true` *if* `n` *new flowers can be planted in the* `flowerbed` *without violating the no-adjacent-flowers rule and* `false` *otherwise*.
+
+**Example 1:**
+
+```
+Input: flowerbed = [1,0,0,0,1], n = 1
+Output: true
+```
+
+**Example 2:**
+
+```
+Input: flowerbed = [1,0,0,0,1], n = 2
+Output: false
+```
+
+**Constraints:**
+
+- `1 <= flowerbed.length <= 2 * 104`
+- `flowerbed[i]` is `0` or `1`.
+- There are no two adjacent flowers in `flowerbed`.
+- `0 <= n <= flowerbed.length`
+
+# **Approach: Greedy Placement**
+
+We want to place `n` flowers such that:
+
+- No two flowers are adjacent
+- We place as many as possible
+
+So we:
+
+👉 Traverse left to right
+
+👉 Whenever we see a valid empty position, we **place a flower immediately**
+
+This greedy choice is safe and optimal.
+
+## Solution:
+
+```java
+class Solution {
+    public boolean canPlaceFlowers(int[] flowerbed, int n) {
+        int count = 0;                 // Number of flowers placed
+        int len = flowerbed.length;
+        // Traverse the flowerbed
+        for (int i = 0; i < len; i++) {
+            // Check left neighbor (0 if boundary)
+            int left = (i == 0) ? 0 : flowerbed[i - 1];
+            // Check right neighbor (0 if boundary)
+            int right = (i == len - 1) ? 0 : flowerbed[i + 1];
+            // If current and neighbors are empty
+            if (flowerbed[i] == 0 && left == 0 && right == 0) {
+                // Place flower here
+                flowerbed[i] = 1;
+                count++;
+                // Early stop if enough flowers placed
+                if (count >= n)
+                    return true;
+            }
+        }
+        // Final check
+        return count >= n;
+    }
+}
+```
+
+# **Time Complexity**
+
+Single loop through array: O(n)
+
+# **Space Complexity**
+
+Only variables used: O(1)
