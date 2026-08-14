@@ -1,0 +1,94 @@
+Given a string `s`, find the length of the **longest** **substring** without duplicate characters.
+
+**Example 1:**
+
+```
+Input: s = "abcabcbb"
+Output: 3
+Explanation: The answer is "abc", with the length of 3. Note that "bca" and "cab" are also correct answers.
+```
+
+**Example 2:**
+
+```
+Input: s = "bbbbb"
+Output: 1
+Explanation: The answer is "b", with the length of 1.
+```
+
+**Example 3:**
+
+```
+Input: s = "pwwkew"
+Output: 3
+Explanation: The answer is "wke", with the length of 3.
+Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
+```
+
+**Constraints:**
+
+- `0 <= s.length <= 5 * 104`
+- `s` consists of English letters, digits, symbols and spaces.
+
+# **Approach: Sliding Window with Last Index Map**
+
+We want the **longest substring with no repeating characters**.
+
+So we maintain:
+
+👉 A sliding window `[l … r]` with **all unique characters**.
+
+We also store:
+
+👉 For each character → its **latest index**.
+
+**Idea:**
+
+When we see a duplicate character: Instead of moving `l` step by step ❌
+
+We **jump `l` directly** to the correct position ✅.
+
+That makes it O(n).
+
+## Solution:
+
+```java
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        // Stores last index of each character
+        HashMap<Character, Integer> map = new HashMap<>();
+        int l = 0;      // Left pointer
+        int max = 0;    // Maximum length found
+        // Right pointer moves forward
+        for (int r = 0; r < s.length(); r++) {
+            char ch = s.charAt(r);
+            // If character already seen
+            if (map.containsKey(ch)) {
+                // Move left pointer after last occurrence
+                l = Math.max(l, map.get(ch) + 1);
+            }
+            // Update last seen index
+            map.put(ch, r);
+            // Update max length
+            max = Math.max(max, r - l + 1);
+        }
+        return max;
+    }
+}
+```
+
+## **Time Complexity**
+
+Each character is processed once.
+
+`l` only moves forward.
+
+So: O(n)
+
+# **Space Complexity**
+
+We store characters in HashMap.
+
+Worst case (all unique): O(n)
+
+✔ Extra space used.
