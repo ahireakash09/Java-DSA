@@ -1,0 +1,109 @@
+Given two strings `s` and `t`, *determine if they are isomorphic*.
+
+Two strings `s` and `t` are isomorphic if the characters in `s` can be replaced to get `t`.
+
+All occurrences of a character must be replaced with another character while preserving the order of characters. No two characters may map to the same character, but a character may map to itself.
+
+**Example 1:**
+
+**Input:** s = "egg", t = "add"
+
+**Output:** true
+
+**Explanation:**
+
+The strings `s` and `t` can be made identical by:
+
+- Mapping `'e'` to `'a'`.
+- Mapping `'g'` to `'d'`.
+
+**Example 2:**
+
+**Input:** s = "f11", t = "b23"
+
+**Output:** false
+
+**Explanation:**
+
+The strings `s` and `t` can not be made identical as `'1'` needs to be mapped to both `'2'` and `'3'`.
+
+**Example 3:**
+
+**Input:** s = "paper", t = "title"
+
+**Output:** true
+
+**Constraints:**
+
+- `1 <= s.length <= 5 * 104`
+- `t.length == s.length`
+- `s` and `t` consist of any valid ascii character.
+
+# **Approach: Two-Way HashMap Mapping**
+
+Two strings are **isomorphic** if:
+
+- Each character in `s` maps to **one unique character** in `t`
+- No two characters in `s` map to the same character in `t`
+
+So we maintain:
+
+`s → t` mapping
+
+`t → s` mapping
+
+This guarantees **bijection**.
+
+## Idea
+
+For every position `i`:
+
+- If `s[i]` was never mapped → create mapping
+- If already mapped → check consistency
+
+If mismatch → return `false`.
+
+## Solution
+
+```java
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        if (s.length() != t.length()) return false;
+        HashMap<Character, Character> smap = new HashMap<>();
+        HashMap<Character, Character> tmap = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            char cs = s.charAt(i);
+            char ct = t.charAt(i);
+            // If mapping already exists, check it
+            if (smap.containsKey(cs)) {
+                if (smap.get(cs) != ct) {
+                    return false;
+                }
+            }
+            else {
+                smap.put(cs, ct);
+            }
+            // Reverse mapping check
+            if (tmap.containsKey(ct)) {
+                if (tmap.get(ct) != cs) {
+                    return false;
+                }
+            }
+            else {
+                tmap.put(ct, cs);
+            }
+        }
+        return true;
+    }
+}
+```
+
+# **Time Complexity**
+
+Single pass through string: O(n)
+
+Optimal.
+
+# **Space Complexity**
+
+In worst case, all chars unique: O(n) Extra space. (Not O(1))
