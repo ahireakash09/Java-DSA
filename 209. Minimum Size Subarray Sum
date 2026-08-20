@@ -1,0 +1,100 @@
+Given an array of positive integers `nums` and a positive integer `target`, return *the **minimal length** of a subarray whose sum is greater than or equal to* `target`. If there is no such subarray, return `0` instead.
+
+**Example 1:**
+
+```
+Input: target = 7, nums = [2,3,1,2,4,3]
+Output: 2
+Explanation: The subarray [4,3] has the minimal length under the problem constraint.
+```
+
+**Example 2:**
+
+```
+Input: target = 4, nums = [1,4,4]
+Output: 1
+```
+
+**Example 3:**
+
+```
+Input: target = 11, nums = [1,1,1,1,1,1,1,1]
+Output: 0
+```
+
+**Constraints:**
+
+- `1 <= target <= 109`
+- `1 <= nums.length <= 105`
+- `1 <= nums[i] <= 104`
+
+**Follow up:**
+
+If you have figured out the
+
+O(n)
+
+solution, try coding another solution of which the time complexity is
+
+O(n log(n))
+
+# **Approach: Variable-Size Sliding Window**
+
+We want the **smallest subarray length** whose sum is **≥ target**.
+
+Because:
+
+✔ All numbers are **positive**
+
+✔ Sum increases when we expand window
+
+We can use **two pointers**.
+
+## Idea
+
+Maintain a window `[l … r]` such that:
+
+sum ≥ target
+
+When condition is met:
+
+👉 Try to **shrink from left** to minimize length.
+
+## Solution
+
+```java
+class Solution {
+    public int minSubArrayLen(int target, int[] nums) {
+        int l = 0;                 // Left pointer
+        int sum = 0;               // Current window sum
+        int min = Integer.MAX_VALUE; // Minimum length found
+        // Right pointer expands window
+        for (int r = 0; r < nums.length; r++) {
+            // Add current element
+            sum += nums[r];
+            // Shrink window while condition satisfied
+            while (sum >= target) {
+                // Update minimum length
+                min = Math.min(min, r - l + 1);
+                // Remove left element and move left pointer
+                sum -= nums[l];
+                l++;
+            }
+        }
+        // If no valid window found
+        return (min == Integer.MAX_VALUE) ? 0 : min;
+    }
+}
+```
+
+# **Time Complexity**
+
+Each element is added and removed once: O(n)
+
+✔ Optimal.
+
+# **Space Complexity**
+
+Only variables: O(1)
+
+✔ Constant space.
