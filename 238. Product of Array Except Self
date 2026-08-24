@@ -1,0 +1,94 @@
+Given an integer array `nums`, return *an array* `answer` *such that* `answer[i]` *is equal to the product of all the elements of* `nums` *except* `nums[i]`.
+
+The product of any prefix or suffix of `nums` is **guaranteed** to fit in a **32-bit** integer.
+
+You must write an algorithm that runs in `O(n)` time and without using the division operation.
+
+**Example 1:**
+
+```
+Input: nums = [1,2,3,4]
+Output: [24,12,8,6]
+```
+
+**Example 2:**
+
+```
+Input: nums = [-1,1,0,-3,3]
+Output: [0,0,9,0,0]
+```
+
+**Constraints:**
+
+- `2 <= nums.length <= 105`
+- `30 <= nums[i] <= 30`
+- The input is generated such that `answer[i]` is **guaranteed** to fit in a **32-bit** integer.
+
+**Follow up:** Can you solve the problem in `O(1)` extra space complexity? (The output array **does not** count as extra space for space complexity analysis.)
+
+# OPTIMAL APPROACH (Prefix + Suffix Product)
+
+Instead of division:
+
+We compute:
+
+answer[i]= (productof elementsleftof i)
+            ×
+            (productof elementsrightof i)
+
+We do it in 2 passes:
+
+## 🔹 Pass 1 → Left Products
+
+For each index:
+
+arr[i] = productofall elementsbefore i
+
+## 🔹 Pass 2 → Multiply Right Products
+
+Traverse from right:
+
+Multiply arr[i] by product of elements afteri
+
+This avoids using extra arrays.
+
+## Solution
+
+```java
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int n = nums.length;
+        int[] arr = new int[n];
+        int prod = 1;
+        // -------- PASS 1: LEFT PRODUCT --------
+        // arr[i] will store product of all elements to the left of i
+        for (int i = 0; i < n; i++) {
+            arr[i] = prod;        // Store left product
+            prod *= nums[i];      // Update running product
+        }
+        // Reset product for right side
+        prod = 1;
+        // -------- PASS 2: RIGHT PRODUCT --------
+        // Multiply with product of elements to the right
+        for (int i = n - 1; i >= 0; i--) {
+            arr[i] *= prod;       // Multiply right product
+            prod *= nums[i];      // Update running product
+        }
+        return arr;
+    }
+}
+```
+
+# TIME COMPLEXITY
+
+Two passes: O(n)
+
+✔ Optimal
+
+# SPACE COMPLEXITY
+
+Output array does NOT count as extra space.
+
+We use: O(1) extra space
+
+✔ Optimal
