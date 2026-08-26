@@ -1,0 +1,64 @@
+Write a function that reverses a string. The input string is given as an array of characters `s`.
+
+You must do this by modifying the input array in-place with `O(1)` extra memory.
+
+**Example 1:**
+
+```
+Input: s = ["h","e","l","l","o"]
+Output: ["o","l","l","e","h"]
+```
+
+**Example 2:**
+
+```
+Input: s = ["H","a","n","n","a","h"]
+Output: ["h","a","n","n","a","H"]
+```
+
+**Constraints:**
+
+- `1 <= s.length <= 105`
+- `s[i]` is a printable ascii character.
+
+# APPROACH
+
+We use the **Two Pointer Technique**.
+
+### Idea:
+
+- One pointer starts at the beginning (`i`)
+- One pointer starts at the end (`j`)
+- Swap characters
+- Move inward
+
+Repeat until they meet.
+
+## Solution
+
+```java
+class Solution {
+    public void reverseString(char[] s) {
+        int i = 0;                  // Left pointer
+        int j = s.length - 1;       // Right pointer
+        // Continue until pointers cross
+        while (i < j) {
+            // Swap characters
+            char temp = s[i];
+            s[i] = s[j];
+            s[j] = temp;
+            // Move pointers inward
+            i++;
+            j--;
+        }
+    }
+}
+```
+
+# TIME COMPLEXITY
+
+We visit each element once: O(n)
+
+# SPACE COMPLEXITY
+
+No extra data structures used: O(1)
