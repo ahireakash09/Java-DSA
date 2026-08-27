@@ -1,0 +1,110 @@
+Given a string `s`, return `true` *if the* `s` *can be palindrome after deleting **at most one** character from it*.
+
+**Example 1:**
+
+```
+Input: s = "aba"
+Output: true
+```
+
+**Example 2:**
+
+```
+Input: s = "abca"
+Output: true
+Explanation: You could delete the character 'c'.
+```
+
+**Example 3:**
+
+```
+Input: s = "abc"
+Output: false
+```
+
+**Constraints:**
+
+- `1 <= s.length <= 105`
+- `s` consists of lowercase English letters.
+
+# APPROACH (Greedy + Two Pointers)
+
+We use two pointers:
+
+- `i` → start
+- `j` → end
+
+### Step 1:
+
+Compare characters from both ends.
+
+### Step 2:
+
+If they match → move inward.
+
+### Step 3:
+
+If mismatch happens:
+
+We are allowed **only one deletion**, so try:
+
+- Skip left character → check `(i+1, j)`
+- Skip right character → check `(i, j-1)`
+
+If either is palindrome → return true.
+
+## Solution
+
+```java
+class Solution {
+    public boolean validPalindrome(String s) {
+        int i = 0;
+        int j = s.length() - 1;
+        while (i < j) {
+            // If characters match → move inward
+            if (s.charAt(i) == s.charAt(j)) {
+                i++;
+                j--;
+            } 
+            else {
+                // Try deleting either left or right character
+                return isPalindrome(s, i + 1, j) 
+                    || isPalindrome(s, i, j - 1);
+            }
+        }
+        // No mismatches found
+        return true;
+    }
+    // Helper method to check if substring is palindrome
+    public boolean isPalindrome(String s, int i, int j) {
+        while (i < j) {
+            if (s.charAt(i) == s.charAt(j)) {
+                i++;
+                j--;
+            } 
+            else {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+
+## Time Complexity
+
+WHY THIS IS O(n), NOT O(n²)
+
+Important interview point 
+
+- Main loop runs once → O(n)
+- Helper runs **at most once**
+- So total work ≤ 2n
+
+Therefore: TimeComplexity= O(n)
+
+# SPACE COMPLEXITY
+
+No extra data structures used.
+
+Space = O(1)
