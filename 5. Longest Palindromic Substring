@@ -1,0 +1,86 @@
+Given a string `s`, return *the longest* *palindromic* *substring* in `s`.
+
+**Example 1:**
+
+```
+Input: s = "babad"
+Output: "bab"
+Explanation: "aba" is also a valid answer.
+```
+
+**Example 2:**
+
+```
+Input: s = "cbbd"
+Output: "bb"
+```
+
+**Constraints:**
+
+- `1 <= s.length <= 1000`
+- `s` consist of only digits and English letters.
+
+# APPROACH STEP-BY-STEP
+
+### Step 1:Loop through every index as potential center.
+
+### Step 2:For each index:
+
+- Expand for odd length
+- Expand for even length
+
+### Step 3:Update global `start` and `end` if longer palindrome found.
+
+### Step 4:Return substring.
+
+## Solution
+
+```java
+class Solution {
+    public String longestPalindrome(String s) {
+        // Edge case
+        if (s == null || s.length() < 1)
+            return "";
+        int start = 0;  // Start index of longest palindrome
+        int end = 0;    // End index of longest palindrome
+        // Try every index as center
+        for (int i = 0; i < s.length(); i++) {
+            // Case 1: Odd length palindrome (center at i)
+            int len1 = expand(s, i, i);
+            // Case 2: Even length palindrome (center between i and i+1)
+            int len2 = expand(s, i, i + 1);
+            // Take maximum length
+            int len = Math.max(len1, len2);
+            // Update longest palindrome boundaries
+            if (len > end - start) {
+                start = i - (len - 1) / 2;
+                end = i + len / 2;
+            }
+        }
+        // Return substring
+        return s.substring(start, end + 1);
+    }
+    // Helper function to expand around center
+    private int expand(String s, int left, int right) {
+        while (left >= 0 && right < s.length()
+               && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+        // Length of palindrome
+        return right - left - 1;
+    }
+}
+```
+
+# TIME COMPLEXITY
+
+Outer loop → `n`
+
+Each expansion → worst case `n`
+
+So: O(n²)
+
+# SPACE COMPLEXITY
+
+We only use variables: O(1)
