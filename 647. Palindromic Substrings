@@ -1,0 +1,155 @@
+Given a string `s`, return *the number of **palindromic substrings** in it*.
+
+A string is a **palindrome** when it reads the same backward as forward.
+
+A **substring** is a contiguous sequence of characters within the string.
+
+**Example 1:**
+
+```
+Input: s = "abc"
+Output: 3
+Explanation: Three palindromic strings: "a", "b", "c".
+```
+
+**Example 2:**
+
+```
+Input: s = "aaa"
+Output: 6
+Explanation: Six palindromic strings: "a", "a", "a", "aa", "aa", "aaa".
+```
+
+**Constraints:**
+
+- `1 <= s.length <= 1000`
+- `s` consists of lowercase English letters.
+
+# APPROACH (Brute Force)
+
+### Step 1:Generate all substrings using two loops:
+
+```
+for i → start index
+for j → end index
+```
+
+Total substrings = **n(n+1)/2**
+
+### Step 2:For each substring:
+
+- Create substring
+- Check palindrome
+
+## Solution
+
+```java
+class Solution {
+    // Helper function to check if a string is palindrome
+    private boolean isPalindrome(String str) {
+        int i = 0;
+        int j = str.length() - 1;
+        while (i < j) {
+            if (str.charAt(i) == str.charAt(j)) {
+                i++;
+                j--;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+    public int countSubstrings(String s) {
+        int count = 0;
+        // Generate all substrings
+        for (int i = 0; i < s.length(); i++) {
+            for (int j = i; j < s.length(); j++) {
+                // Extract substring
+                String str = s.substring(i, j + 1);
+                // Check if palindrome
+                if (isPalindrome(str)) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+}
+```
+
+# TIME COMPLEXITY
+
+Outer loops → O(n²)
+
+Palindrome check → O(n)
+
+Substring creation → O(n)
+
+So total:O(n³)
+
+❌ Not efficient for large input.
+
+# SPACE COMPLEXITY
+
+Substring creation → O(n) per call
+
+Overall auxiliary space: O(n)
+
+# Approach Efficient Expand Around Center
+
+Every palindrome has a center.
+
+For each index `i`, we try:
+
+1️⃣ Odd length → center at `(i, i)`
+
+2️⃣ Even length → center at `(i, i+1)`
+
+Expand outward while characters match.
+
+Every successful expansion = 1 palindrome.
+
+## Solution
+
+```java
+class Solution {
+    // Expands around center and counts palindromes
+    private int isPalindrome(String s, int i, int j) {
+        int count = 0;
+        // Expand while valid and characters match
+        while (i >= 0 && j < s.length() 
+               && s.charAt(i) == s.charAt(j)) {
+            count++;    // Found one palindrome
+            i--;
+            j++;
+        }
+        return count;
+    }
+    public int countSubstrings(String s) {
+        int count = 0;
+        for (int i = 0; i < s.length(); i++) {
+            // Count odd length palindromes
+            count += isPalindrome(s, i, i);
+            // Count even length palindromes
+            count += isPalindrome(s, i, i + 1);
+        }
+        return count;
+    }
+}
+```
+
+# TIME COMPLEXITY
+
+Outer loop → O(n)
+
+Each expansion → O(n) worst case
+
+Total: O(n²)
+
+Worst case: "aaaaaaa"
+
+# SPACE COMPLEXITY
+
+No extra data structures used.
+
+Space Complexity: O(1)
